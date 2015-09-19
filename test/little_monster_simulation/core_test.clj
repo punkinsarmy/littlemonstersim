@@ -1,7 +1,8 @@
 (ns little-monster-simulation.core-test
   (:require [clojure.test :refer :all]
-            [little-monster-simulation.core :refer :all]))
+            [little-monster-simulation.core :as c]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest monsters
+  (testing "a monster with no stats is dead"
+    (let [monster (c/monster)]
+      (is (not (c/alive? monster))))))
