@@ -2,8 +2,16 @@
 
 (defn monster [] {})
 
+(defn value-of [monster stat]
+  (first (stat monster)))
+
 (defn alive?
   [monster]
-  (if-let [life (first (:life monster))]
+  (if-let [life (value-of monster :life)]
     (< 0 life)
-    false ))
+    false))
+
+(defn tick
+  [monster dt]
+  (into {} (for [[key [value behaviour]] monster]
+             [key [(behaviour value dt) behaviour]])))
