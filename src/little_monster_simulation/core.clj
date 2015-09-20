@@ -4,4 +4,6 @@
 
 (defn alive?
   [monster]
-  false)
+  (if-let [life (first (:life monster))]
+    (< 0 life)
+    false ))
