@@ -3,12 +3,14 @@
             [little-monster-simulation.core :as c]))
 
 (defn identity-behaviour
-  [value time]
-  value)
+  [monster time]
+  monster)
 
 (defn halvit-behaviour
-  [value time]
-  (/ value 2))
+  [stat]
+  (fn [monster _]
+    (println "humph" (c/value-of monster :life))
+    (update-in monster [:stats stat] (partial * 0.5))))
 
 (deftest monsters
   (testing "a monster with no stats is dead"
@@ -17,16 +19,20 @@
 
   (testing "a monster with life some life is alive"
     (let [monster (c/monster)
-          monster' (assoc monster :life [100 identity-behaviour])]
+          monster' (assoc-in monster [:stats :life] 100)]
       (is (c/alive? monster'))))
 
   (testing "can get value of a stat"
     (let [monster (c/monster)
-          monster' (assoc monster :life [100 identity-behaviour])]
-      (is (= 100 (c/value-of monster' :life)))))
+          monster' (assoc-in monster [:stats :life] 100)
+          monster'' (update-in monster' [:behaviours]
+                               #(conj % identity-behaviour))]
+      (is (= 100 (c/value-of monster'' :life)))))
 
   (testing "life can change with time"
     (let [monster (c/monster)
-          monster' (assoc monster :life [100 halvit-behaviour])
-          monster'' (c/tick monster' 100)]
-      (is (= 50 (c/value-of monster'' :life))))))
+          monster' (assoc-in monster [:stats  :life] 100)
+          monster'' (update-in monster' [:behaviours]
+                               #(conj % (halvit-behaviour :life)))
+          monster''' (c/tick monster'' 100)]
+      (is (= 50.0 (c/value-of monster''' :life))))))

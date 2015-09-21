@@ -1,9 +1,9 @@
 (ns little-monster-simulation.core)
 
-(defn monster [] {})
+(defn monster [] {:stats {} :behaviours []})
 
 (defn value-of [monster stat]
-  (first (stat monster)))
+  (stat (:stats monster)))
 
 (defn alive?
   [monster]
@@ -13,5 +13,6 @@
 
 (defn tick
   [monster dt]
-  (into {} (for [[key [value behaviour]] monster]
-             [key [(behaviour value dt) behaviour]])))
+  (reduce #(%2 % dt)
+          monster
+          (:behaviours monster)))
