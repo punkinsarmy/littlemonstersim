@@ -9,7 +9,6 @@
 (defn halvit-behaviour
   [stat]
   (fn [monster _]
-    (println "humph" (c/value-of monster :life))
     (update-in monster [:stats stat] (partial * 0.5))))
 
 (deftest monsters
