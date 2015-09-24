@@ -53,4 +53,10 @@
                    :behaviours {:one-shot (fn [m _]
                                             (dissoc-in m [:behaviours :one-shot]))}}
           monster' (c/tick monster 1)]
-      (is (empty? (:behaviours monster'))))))
+      (is (empty? (:behaviours monster')))))
+  (testing "behaviours can add stats"
+    (let [monster {:stats {:life 100}
+                   :behaviours {:walkies (fn [m _]
+                                           (assoc-in m [:stats :walk] 100))}}
+          monster' (c/tick monster 1)]
+      (is (= 100 (c/value-of monster' :walk))))))
