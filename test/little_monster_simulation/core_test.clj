@@ -70,4 +70,11 @@
                                                       (fn [m _]
                                                         (assoc-in m [:stats :walk] 100))))}}
           monster' (c/tick (c/tick monster 1) 1)]
-      (is (= 100 (c/value-of monster' :walk))))))
+      (is (= 100 (c/value-of monster' :walk)))))
+
+  (testing "behaviours can remove stats"
+    (let [monster {:stats {:life 100 :foo 5}
+                   :behaviours {:kill-foo (fn [m _]
+                                             (dissoc-in m [:stats :foo]))}}
+          monster' (c/tick monster 1)]
+      (is (nil? ((comp :foo :stats) monster'))))))
