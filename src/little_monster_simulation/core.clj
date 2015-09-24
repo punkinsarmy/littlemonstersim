@@ -1,6 +1,6 @@
 (ns little-monster-simulation.core)
 
-(defn monster [] {:stats {} :behaviours []})
+(defn monster [] {:stats {} :behaviours (array-map)})
 
 (defn value-of [monster stat]
   (stat (:stats monster)))
@@ -15,4 +15,4 @@
   [monster dt]
   (reduce #(%2 % dt)
           monster
-          (:behaviours monster)))
+          (vals (:behaviours monster))))
