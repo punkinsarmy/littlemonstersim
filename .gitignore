@@ -41,3 +41,4 @@ tramp
 
 # cask packages
 .cask/
+cov/
